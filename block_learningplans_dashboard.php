@@ -40,7 +40,6 @@ class block_learningplans_dashboard extends block_base {
         $this->content = new stdClass;
 
         $cohorts = $DB->get_records('cohort');
-
         $assignedCompetencyPlanIDs = $DB->get_records('competency_plan', null, '', 'id');
         $userids = [];
         $users=[];
@@ -104,6 +103,7 @@ class block_learningplans_dashboard extends block_base {
 
         $data = [
             'cohorts' => array_values($cohorts),
+            'cohortView' => false
         ];
 
         $this->content->text = $OUTPUT->render_from_template('block_learningplans_dashboard/user_competency_overview', $data);
