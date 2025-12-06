@@ -28,3 +28,4 @@ $string['newlearningplansdashboardblock'] = 'LUI Leer plannen';
 $string['sumstring'] = '{$a->proficiency} van de {$a->competencies} competenties zijn compleet.';
 $string['editstring'] = 'Aanpassen';
 $string['pluginname'] = 'Learning plans dashboard block';
+$string['tab_users']= "Studenten overzicht";

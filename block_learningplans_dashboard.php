@@ -15,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 use core_competency\plan;
-use core_competency\user_competency;
-use core_external\util as external_util;
 use core_competency\api;
 /**
  * Dashboard for viewing learning plans by cohorts and individuals
@@ -40,6 +38,8 @@ class block_learningplans_dashboard extends block_base {
         }
 
         $this->content = new stdClass;
+
+        $cohorts = $DB->get_records('cohort');
 
         $assignedCompetencyPlanIDs = $DB->get_records('competency_plan', null, '', 'id');
         $userids = [];
@@ -89,11 +89,24 @@ class block_learningplans_dashboard extends block_base {
             $user->picture = $OUTPUT->user_picture($user);
         }
 
+        foreach ($cohorts as $cohort) {
+            foreach ($users as $user) {
+                if($DB->record_exists('cohort_members', array('cohortid'=>$cohort->id, 'userid'=>$user->id)))
+                {
+                    if($cohort->users == null)
+                    {
+                        $cohort->users = [];
+                    }
+                    $cohort->users = [...$cohort->users, $user];
+                }
+            }
+        }
+
         $data = [
-            'users' => array_values($users),
+            'cohorts' => array_values($cohorts),
         ];
 
-        $this->content->text = $OUTPUT->render_from_template('block_learningplans_dashboard/main', $data);
+        $this->content->text = $OUTPUT->render_from_template('block_learningplans_dashboard/user_competency_overview', $data);
 
         return $this->content;
     }
