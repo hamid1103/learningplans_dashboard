@@ -85,8 +85,15 @@ class block_learningplans_dashboard extends block_base
             //Add counts to competencyplan to user
             $userPlan['proficiency'] = $proficientCount;
             $userPlan['competency'] = $competencyCount;
-            $newUser->plans = [...$newUser->plans, $userPlan];
-            $newUser->editUrl = new moodle_url('/admin/tool/lp/plan.php', array('id' => $plan->get('id')));
+            $userPlan['editUrl'] = new moodle_url('/admin/tool/lp/plan.php', array('id' => $plan->get('id')));
+            if($userPlan['name'] == "ALL")
+            {
+                    $newUser->allCompetenciesEditUrl = $userPlan['editUrl'];
+                    $newUser->TotalProficiency = $proficientCount;
+                    $newUser->TotalCompetency = $competencyCount;
+            }else{
+                $newUser->plans = [...$newUser->plans, $userPlan];
+            }
             if(!in_array($plan->get('userid'), $userids)) {
                 $users[$plan->get('userid')]=$newUser;
             }
@@ -100,7 +107,7 @@ class block_learningplans_dashboard extends block_base
         foreach ($cohorts as $cohort) {
             foreach ($users as $user) {
                 if ($DB->record_exists('cohort_members', array('cohortid' => $cohort->id, 'userid' => $user->id))) {
-                    if ($cohort->users == null) {
+                    if (!isset($cohort->users)) {
                         $cohort->users = [];
                     }
                     $cohort->users = [...$cohort->users, $user];
@@ -111,7 +118,6 @@ class block_learningplans_dashboard extends block_base
             'cohorts' => array_values($cohorts),
             'cohortView' => false
         ];
-
 
         $this->content->text = $OUTPUT->render_from_template('block_learningplans_dashboard/user_competency_overview', $data);
         return $this->content;

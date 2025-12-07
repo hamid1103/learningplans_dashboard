@@ -25,7 +25,8 @@
 $string['newlearningplansdashboardblock:addinstance'] = 'Voeg leer plannen dashboard blok toe.';
 $string['newlearningplansdashboardblock:myaddinstance'] = 'Voeg leer plannen blok toe aan het dashboard.';
 $string['newlearningplansdashboardblock'] = 'LUI Leer plannen';
-$string['sumstring'] = '{$a->proficiency} van de {$a->competencies} competenties zijn compleet.';
+$string['viewallcomps'] = 'Bekijk of verander alle competenties';
+$string['sumstring'] = '{$a->proficiency} van de {$a->competencies} totale competenties zijn compleet.';
 $string['editstring'] = 'Aanpassen';
 $string['pluginname'] = 'Learning plans dashboard block';
 $string['tab_users']= "Studenten overzicht";

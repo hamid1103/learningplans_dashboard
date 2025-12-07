@@ -44,22 +44,31 @@
                     <div class="col">
                         <span class="align-middle bold">{{firstname}} {{lastname}}</span>
                     </div>
-                    <div class="col-2 align-right text-right">
-                        <a href="{{editUrl}}" class="btn btn-primary float-sm-end float-end ms-1 mb-2">
-                            {{#str}}editstring, block_learningplans_dashboard{{/str}}
-                        </a>
-                    </div>
                 </div>
                 <div class="row">
+                    <span>{{#str}}sumstring, block_learningplans_dashboard, {"proficiency":"{{TotalProficiency}}",
+                        "competencies":"{{TotalCompetency}}"}
+                    {{/str}}</span>
+                    <span>
+                        <a href="{{allCompetenciesEditUrl}}">
+                            {{#str}}viewallcomps, block_learningplans_dashboard{{/str}}
+                        </a>
+                    </span>
+                    <div class="row">
+                        <div class="col w-100">
+                        <progress class="progress w-100" value="{{TotalProficiency}}" max="{{TotalCompetency}}"></progress>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-1">
                     {{#plans}}
-                        <div class="row">
-                            {{name}}
-                        </div>
-                        <div class="row">
-                            {{#str}}sumstring, block_learningplans_dashboard, {"proficiency":"{{proficiency}}",
-                                "competencies":"{{competency}}"}
-                            {{/str}}
-                        </div>
+                        <a href="{{editUrl}}" class="col card w-25">
+                            <div class="card-body">
+                                <h5 class="card-title">{{name}}</h5>
+                                <progress class="progress w-100" value="{{proficiency}}"
+                                          max="{{competency}}"></progress>
+                            </div>
+                        </a>
                     {{/plans}}
 
                 </div>

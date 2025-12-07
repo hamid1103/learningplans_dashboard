@@ -25,7 +25,8 @@
 $string['newlearningplansdashboardblock:addinstance'] = 'Add a new learning plans dashboard block';
 $string['newlearningplansdashboardblock:myaddinstance'] = 'Add a new learning plans dashboard block to Dashboard';
 $string['newlearningplansdashboardblock'] = 'LUI Learning Plans';
-$string['sumstring'] = '{$a->proficiency} out of {$a->competencies} competencies are proficient';
+$string['sumstring'] = '{$a->proficiency} out of a total of {$a->competencies} competencies are proficient';
+$string['viewallcomps'] = 'View/Edit all competencies';
 $string['editstring'] = 'Edit';
 $string['tab_users']= "Student overview";
 $string['pluginname'] = 'Learning plans dashboard block';
