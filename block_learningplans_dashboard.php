@@ -16,6 +16,7 @@
 
 use core_competency\plan;
 use core_competency\api;
+
 /**
  * Dashboard for viewing learning plans by cohorts and individuals
  * Commisioned by IUASR
@@ -24,12 +25,15 @@ use core_competency\api;
  * @copyright 2025 Abdel Hamid Saib (corvo@arcadianflame.nl)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_learningplans_dashboard extends block_base {
-    function init() {
+class block_learningplans_dashboard extends block_base
+{
+    function init()
+    {
         $this->title = get_string('newlearningplansdashboardblock', 'block_learningplans_dashboard');
     }
 
-    function get_content() {
+    function get_content()
+    {
         global $DB;
         global $OUTPUT;
 
@@ -42,7 +46,7 @@ class block_learningplans_dashboard extends block_base {
         $cohorts = $DB->get_records('cohort');
         $assignedCompetencyPlanIDs = $DB->get_records('competency_plan', null, '', 'id');
         $userids = [];
-        $users=[];
+        $users = [];
         //For now, focus on ONE specific LP (learning plan), the one that targets ALL competencies
 
         foreach ($assignedCompetencyPlanIDs as $planID) {
@@ -53,14 +57,15 @@ class block_learningplans_dashboard extends block_base {
             $proficientCount = 0;
             $competencyCount = 0;
 
-            if(!in_array($plan->get('userid'), $userids)) {
-                $userids= [...$userids, $plan->get('userid')];
+            if (!in_array($plan->get('userid'), $userids)) {
+                $userids = [...$userids, $plan->get('userid')];
                 $newUser = $DB->get_record('user', array('id' => $plan->get('userid')));
                 $newUser->plans = [];
                 $users[$plan->get('userid')]=$newUser;
-            }else{
+            } else {
                 $newUser = $users[$plan->get('userid')];
             }
+
 
             $ucproperty = 'usercompetency';
             foreach ($pclist as $pc) {
@@ -76,42 +81,44 @@ class block_learningplans_dashboard extends block_base {
                 }
             }
 
-            $userPlan = ['name'=>$plan->get('name'), 'proficiency'=>$proficientCount, 'competencyCount'=>$competencyCount];
+            $userPlan = ['name' => $plan->get('name'), 'proficiency' => $proficientCount, 'competencyCount' => $competencyCount];
             //Add counts to competencyplan to user
+            $userPlan['proficiency'] = $proficientCount;
+            $userPlan['competency'] = $competencyCount;
             $newUser->plans = [...$newUser->plans, $userPlan];
-            $newUser->proficiency = $proficientCount;
-            $newUser->competency = $competencyCount;
             $newUser->editUrl = new moodle_url('/admin/tool/lp/plan.php', array('id' => $plan->get('id')));
+            if(!in_array($plan->get('userid'), $userids)) {
+                $users[$plan->get('userid')]=$newUser;
+            }
         }
 
         foreach ($users as $user) {
             $user->picture = $OUTPUT->user_picture($user);
         }
 
+
         foreach ($cohorts as $cohort) {
             foreach ($users as $user) {
-                if($DB->record_exists('cohort_members', array('cohortid'=>$cohort->id, 'userid'=>$user->id)))
-                {
-                    if($cohort->users == null)
-                    {
+                if ($DB->record_exists('cohort_members', array('cohortid' => $cohort->id, 'userid' => $user->id))) {
+                    if ($cohort->users == null) {
                         $cohort->users = [];
                     }
                     $cohort->users = [...$cohort->users, $user];
                 }
             }
         }
-
         $data = [
             'cohorts' => array_values($cohorts),
             'cohortView' => false
         ];
 
-        $this->content->text = $OUTPUT->render_from_template('block_learningplans_dashboard/user_competency_overview', $data);
 
+        $this->content->text = $OUTPUT->render_from_template('block_learningplans_dashboard/user_competency_overview', $data);
         return $this->content;
     }
 
-    public function applicable_formats() {
+    public function applicable_formats()
+    {
         return [
             'admin' => false,
             'site-index' => true,

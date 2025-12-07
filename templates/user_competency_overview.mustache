@@ -51,9 +51,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
-                        {{#str}}sumstring, block_learningplans_dashboard, {"proficiency":"{{proficiency}}", "competencies":"{{competency}}"} {{/str}}
-                    </div>
+                    {{#plans}}
+                        <div class="row">
+                            {{name}}
+                        </div>
+                        <div class="row">
+                            {{#str}}sumstring, block_learningplans_dashboard, {"proficiency":"{{proficiency}}",
+                                "competencies":"{{competency}}"}
+                            {{/str}}
+                        </div>
+                    {{/plans}}
+
                 </div>
             </div>
         {{/users}}
