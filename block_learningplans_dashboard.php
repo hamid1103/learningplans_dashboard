@@ -44,64 +44,7 @@ class block_learningplans_dashboard extends block_base
         $this->content = new stdClass;
 
         $cohorts = $DB->get_records('cohort');
-        $assignedCompetencyPlanIDs = $DB->get_records('competency_plan', null, '', 'id');
-        $userids = [];
         $users = [];
-        //For now, focus on ONE specific LP (learning plan), the one that targets ALL competencies
-
-        foreach ($assignedCompetencyPlanIDs as $planID) {
-            $plan = new plan($planID->id);
-
-            //All competencies associated with a plan (not with user, confusing)
-            $pclist = api::list_plan_competencies($plan->get('id'));
-            $proficientCount = 0;
-            $competencyCount = 0;
-
-            if (!in_array($plan->get('userid'), $userids)) {
-                $userids = [...$userids, $plan->get('userid')];
-                $newUser = $DB->get_record('user', array('id' => $plan->get('userid')));
-                $newUser->plans = [];
-                $users[$plan->get('userid')]=$newUser;
-            } else {
-                $newUser = $users[$plan->get('userid')];
-            }
-
-
-            $ucproperty = 'usercompetency';
-            foreach ($pclist as $pc) {
-                //add to total count
-                $competencyCount++;
-
-                //check if student = competent.
-                $comp = $pc->competency;
-                $usercomp = $pc->$ucproperty;
-
-                if ($usercomp->get('proficiency')) {
-                    $proficientCount++;
-                }
-            }
-
-            $userPlan = ['name' => $plan->get('name'), 'proficiency' => $proficientCount, 'competencyCount' => $competencyCount];
-            //Add counts to competencyplan to user
-            $userPlan['proficiency'] = $proficientCount;
-            $userPlan['competency'] = $competencyCount;
-            $userPlan['editUrl'] = new moodle_url('/admin/tool/lp/plan.php', array('id' => $plan->get('id')));
-            if($userPlan['name'] == "ALL")
-            {
-                    $newUser->allCompetenciesEditUrl = $userPlan['editUrl'];
-                    $newUser->TotalProficiency = $proficientCount;
-                    $newUser->TotalCompetency = $competencyCount;
-            }else{
-                $newUser->plans = [...$newUser->plans, $userPlan];
-            }
-            if(!in_array($plan->get('userid'), $userids)) {
-                $users[$plan->get('userid')]=$newUser;
-            }
-        }
-
-        foreach ($users as $user) {
-            $user->picture = $OUTPUT->user_picture($user);
-        }
 
 
         foreach ($cohorts as $cohort) {
@@ -113,6 +56,7 @@ class block_learningplans_dashboard extends block_base
                     $cohort->users = [...$cohort->users, $user];
                 }
             }
+            $cohort->userCount = count($cohort->users);
         }
         $data = [
             'cohorts' => array_values($cohorts),

@@ -33,46 +33,17 @@
     }
 }}
 
-<div class="col">
-    {{#cohorts}}
-        {{#users}}
-            <div class="col p-2 border-bottom">
-                <div class="row vertical-align align-middle items-center">
-                    <div class="col-1">
-                        {{{picture}}}
-                    </div>
-                    <div class="col">
-                        <span class="align-middle bold">{{firstname}} {{lastname}}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <span>{{#str}}sumstring, block_learningplans_dashboard, {"proficiency":"{{TotalProficiency}}",
-                        "competencies":"{{TotalCompetency}}"}
-                    {{/str}}</span>
-                    <span>
-                        <a href="{{allCompetenciesEditUrl}}">
-                            {{#str}}viewallcomps, block_learningplans_dashboard{{/str}}
-                        </a>
+<div class="row">
+        {{#cohorts}}
+            <a>
+                <div class="d-flex flex-column border border-dark mt-1 p-1">
+                    <span class="col h3">
+                        {{name}}
                     </span>
-                    <div class="row">
-                        <div class="col w-100">
-                        <progress class="progress w-100" value="{{TotalProficiency}}" max="{{TotalCompetency}}"></progress>
-                        </div>
-                    </div>
+                    <span class="col h4">
+                        {{userCount}} Studenten
+                    </span>
                 </div>
-                <div class="row p-1">
-                    {{#plans}}
-                        <a href="{{editUrl}}" class="col card w-25">
-                            <div class="card-body">
-                                <h5 class="card-title">{{name}}</h5>
-                                <progress class="progress w-100" value="{{proficiency}}"
-                                          max="{{competency}}"></progress>
-                            </div>
-                        </a>
-                    {{/plans}}
-
-                </div>
-            </div>
-        {{/users}}
-    {{/cohorts}}
+            </a>
+        {{/cohorts}}
 </div>

@@ -1,9 +1,4 @@
 <?php
-$view = optional_param('view', 'upcoming', PARAM_ALPHA);
+$view = optional_param('id', 0, PARAM_ALPHA);
 
-switch ($view) {
-    case 'solo':
-        break;
-    case 'group':
-        break;
-}
+$renderer = $PAGE->get_renderer('core_calendar');
